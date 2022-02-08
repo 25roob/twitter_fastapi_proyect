@@ -1,1 +1,18 @@
-[]
+[
+  {
+    "user_id": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+    "email": "roberto@example.com",
+    "first_name": "Roberto",
+    "last_name": "Quijano",
+    "birth_date": "2022-02-08",
+    "password": "Ajajaja01"
+  },
+  {
+    "user_id": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+    "email": "miguel@example.com",
+    "first_name": "Miguel",
+    "last_name": "Torres",
+    "birth_date": "2022-02-08",
+    "password": "holasoymiguel"
+  }
+]
