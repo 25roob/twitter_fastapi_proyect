@@ -13,9 +13,10 @@ from pydantic import EmailStr
 from pydantic import Field
 
 # FastAPI
+from fastapi import HTTPException
 from fastapi import FastAPI
 from fastapi import status
-from fastapi import Body, Form
+from fastapi import Body, Form, Path
 
 app = FastAPI()
 
@@ -124,9 +125,10 @@ def login(email: str = Form(...), password: str = Form(...)):
 
     Parameters: 
     - Request Body parameter
-        - User: UserLogin
+        - email: str
+        - password: str
 
-    Returns a login message
+    Returns a User
     """
     with open("users.json", "r", encoding="utf-8") as f:
         results = json.loads(f.read())
@@ -142,6 +144,10 @@ def login(email: str = Form(...), password: str = Form(...)):
                         ) 
                 except:
                     continue
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Incorrect user or password."
+        )
 
 ### Show all users
 @app.get(
@@ -178,8 +184,31 @@ def show_all_users():
     summary="Show a user",
     tags=["Users"]
 )
-def show_a_user():
-    pass
+def show_a_user(user_id: str = Path(...)):
+    """
+    This path operation shows the data of a user by it's ID.
+
+    Parameters:
+    - first_name: str
+    - last_name: str
+
+    Returns a User model.
+    """
+    with open("users.json", "r", encoding="utf-8") as f:
+        results = json.loads(f.read())
+        for _user in results:
+            if _user["user_id"] == user_id:
+                return User(
+                        user_id=_user["user_id"], 
+                        email=_user["email"], 
+                        first_name= _user["first_name"],
+                        last_name= _user["last_name"],
+                        birth_date= _user["birth_date"]
+                        )
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="¡This person doesn't exists!"
+        )
 
 ### Delete a user
 @app.delete(
