@@ -1,6 +1,8 @@
 # Python
+import email
 import json
 from typing import Optional, List
+from unittest import result
 from uuid import UUID
 from datetime import date
 from datetime import datetime
@@ -13,7 +15,7 @@ from pydantic import Field
 # FastAPI
 from fastapi import FastAPI
 from fastapi import status
-from fastapi import Body
+from fastapi import Body, Form
 
 app = FastAPI()
 
@@ -21,7 +23,10 @@ app = FastAPI()
 
 class UserBase(BaseModel):
     user_id: UUID = Field(...)
-    email: EmailStr = Field(...)
+    email: EmailStr = Field(
+        ...,
+        example="miguel@example.com"
+        )
 
 class UserLogin(UserBase):
     password: str = Field(
@@ -47,7 +52,8 @@ class UserRegister(User):
     password: str = Field(
         ..., 
         min_length=8,
-        max_length=64
+        max_length=64,
+        example="holasoymiguel"
     )
 
 class Tweet(BaseModel):
@@ -108,7 +114,9 @@ def signup(user: UserRegister = Body(...)):
     summary="Login a user",
     tags=["Users"]
 )
-def login(user: UserLogin = Body(...)):
+# def login(email: str = Form(...), password: str = Form(...)):
+def login(email: str = Form(...), password: str = Form(...)):
+
     """
     Login
 
@@ -120,6 +128,20 @@ def login(user: UserLogin = Body(...)):
 
     Returns a login message
     """
+    with open("users.json", "r", encoding="utf-8") as f:
+        results = json.loads(f.read())
+        for _user in results:
+            if (_user["email"] == email) and (_user['password'] == password):
+                try:
+                    return User(
+                        user_id=_user["user_id"], 
+                        email=email, 
+                        first_name= _user["first_name"],
+                        last_name= _user["last_name"],
+                        birth_date= _user["birth_date"]
+                        ) 
+                except:
+                    continue
 
 ### Show all users
 @app.get(
