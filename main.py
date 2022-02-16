@@ -231,7 +231,6 @@ def delete_a_user(user_id: str = Path(...)):
     """
     with open("users.json", "r+", encoding="utf-8") as f:
         results = json.loads(f.read())
-        # user_dict = user.dict()
         for _user in results:
             if _user["user_id"] == user_id:
                 results.remove(_user)
@@ -249,13 +248,7 @@ def delete_a_user(user_id: str = Path(...)):
             status_code=status.HTTP_404_NOT_FOUND,
             detail="¡This person doesn't exists!"
         )
-
-        # user_dict["user_id"] = str(user_dict["user_id"])
-        # user_dict["birth_date"] = str(user_dict["birth_date"])
-        # results.append(user_dict)
-        f.seek(0)
-        f.write(json.dumps(results))
-        return User()
+       
 
 ### Upddate a user
 @app.put(
@@ -265,8 +258,35 @@ def delete_a_user(user_id: str = Path(...)):
     summary="Update a user",
     tags=["Users"]
 )
-def update_a_user():
-    pass
+def update_a_user(user_id: str = Path(...), user: UserRegister = Body(...)):
+    """
+    This path operation updated the information of a user.
+
+    Parameters:
+    - user_id: str
+
+    Returns a json with the updated imformation of the user
+    """
+    with open("users.json", "r+", encoding="utf-8") as f:
+        results = json.loads(f.read())
+        user_d = user.dict()
+        for _user in results:
+            if _user["user_id"] == user_id:
+                _user["user_id"] = user_id
+                _user["email"] = str(user_d["email"])
+                _user["first_name"] = user_d["first_name"]
+                _user["last_name"] = user_d["last_name"]
+                _user["birth_date"] = str(user_d["birth_date"])
+                _user["password"] = user_d["password"]
+                with open("users.json", "w", encoding="utf-8") as f:
+                    f.seek(0)
+                    f.write(json.dumps(results))
+                return _user
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="This person does not exists!"
+        )
+
 
 ## Tweets
 
