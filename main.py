@@ -386,18 +386,38 @@ def show_a_tweet(tweet_id: str = Path(...)):
     path="/tweets/{tweet_id}/delete",
     response_model=Tweet,
     status_code=status.HTTP_200_OK,
-    summary="Delete a tweer",
+    summary="Delete a tweet",
     tags=["Tweets"]
 )
-def delete_a_tweet():
-    pass
+def delete_a_tweet(tweet_id: str = Path(...)):
+    """
+    This path operation deletes a tweet
+
+    Parameters:
+    - tweet_id: str
+
+    Returns a json with the information of the deleted tweet
+    """
+    with open("tweets.json", "r+", encoding="utf-8") as f:
+        results = json.loads(f.read())
+        for _tweet in results:
+            if _tweet["tweet_id"] == tweet_id:
+                results.remove(_tweet)
+                with open("tweets.json", "w", encoding="utf-8") as f:
+                    f.seek(0)
+                    f.write(json.dumps(results))
+                return _tweet
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="¡This tweet doesn't exists!"
+        )
 
 ### Update a tweet
 @app.put(
     path="/tweets/{tweet_id}/update",
     response_model=Tweet,
     status_code=status.HTTP_200_OK,
-    summary="Update a tweer",
+    summary="Update a tweet",
     tags=["Tweets"]
 )
 def update_a_tweet():

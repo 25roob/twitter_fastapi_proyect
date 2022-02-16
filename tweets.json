@@ -1,18 +1,5 @@
 [
   {
-    "tweet_id": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
-    "content": "string",
-    "created_at": "2022-02-09 12:10:51.263876",
-    "update_at": "2022-02-09 18:10:59.504000+00:00",
-    "by": {
-      "user_id": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
-      "email": "user@example.com",
-      "first_name": "string",
-      "last_name": "string",
-      "birth_date": "2022-02-09"
-    }
-  },
-  {
     "tweet_id": "3fa85f64-5717-4562-b3fc-2c963f66afa7",
     "content": "Primer tweet perros",
     "created_at": "2022-02-09 15:03:31.313889",
@@ -36,6 +23,19 @@
       "first_name": "Rocio",
       "last_name": "Parra",
       "birth_date": "2022-02-09"
+    }
+  },
+  {
+    "tweet_id": "3fa85f64-5717-4562-b3fc-2c963f66afa0",
+    "content": "string_0",
+    "created_at": "2022-02-15 20:27:39.019953",
+    "update_at": "2022-02-16 02:29:02.645000+00:00",
+    "by": {
+      "user_id": "3fa85f64-5717-4562-b3fc-2c963f66afa0",
+      "email": "miguel@example.com",
+      "first_name": "string",
+      "last_name": "string",
+      "birth_date": "2022-02-16"
     }
   }
 ]
