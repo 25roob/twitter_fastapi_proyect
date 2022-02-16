@@ -189,8 +189,9 @@ def show_a_user(user_id: str = Path(...)):
     This path operation shows the data of a user by it's ID.
 
     Parameters:
-    - first_name: str
-    - last_name: str
+    - Request body parameters:
+        - first_name: str
+        - last_name: str
 
     Returns a User model.
     """
@@ -218,8 +219,43 @@ def show_a_user(user_id: str = Path(...)):
     summary="Delete a user",
     tags=["Users"]
 )
-def delete_a_user():
-    pass
+def delete_a_user(user_id: str = Path(...)):
+    """
+    This path operation receives an ID and deletes a user from the database.
+
+    Parameters:
+    - Request body parameters:
+        - user_id: str
+
+    Returns a json with the deleted user data.
+    """
+    with open("users.json", "r+", encoding="utf-8") as f:
+        results = json.loads(f.read())
+        # user_dict = user.dict()
+        for _user in results:
+            if _user["user_id"] == user_id:
+                results.remove(_user)
+                with open("users.json", "w", encoding="utf-8") as f:
+                    f.seek(0)
+                    f.write(json.dumps(results))
+                return User(
+                    user_id= _user["user_id"],
+                    email= _user["email"],
+                    first_name= _user["first_name"],
+                    last_name= _user["last_name"],
+                    birth_date= _user["birth_date"]
+                )
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="¡This person doesn't exists!"
+        )
+
+        # user_dict["user_id"] = str(user_dict["user_id"])
+        # user_dict["birth_date"] = str(user_dict["birth_date"])
+        # results.append(user_dict)
+        f.seek(0)
+        f.write(json.dumps(results))
+        return User()
 
 ### Upddate a user
 @app.put(
