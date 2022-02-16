@@ -1,8 +1,6 @@
 # Python
-import email
 import json
 from typing import Optional, List
-from unittest import result
 from uuid import UUID
 from datetime import date
 from datetime import datetime
@@ -420,5 +418,29 @@ def delete_a_tweet(tweet_id: str = Path(...)):
     summary="Update a tweet",
     tags=["Tweets"]
 )
-def update_a_tweet():
-    pass
+def update_a_tweet(tweet_id: str = Path(...), tweet: Tweet = Body(...)):
+    """
+    This path operation updates the content of a tweet
+
+    Parameters:
+    - tweet_id: str
+
+    Returns a json with the information of the updated tweet.
+    """
+    with open("tweets.json", "r+", encoding="utf-8") as f:
+        results = json.loads(f.read())
+        tweet_d = tweet.dict()
+        for _tweet in results:
+            if _tweet["tweet_id"] == tweet_id:
+                _tweet["tweet_id"] = tweet_id
+                _tweet["content"] = tweet_d["content"]
+                _tweet["update_at"] = str(tweet_d["update_at"])
+                                
+                with open("tweets.json", "w", encoding="utf-8") as f:
+                    f.seek(0)
+                    f.write(json.dumps(results))
+                return _tweet
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="This person does not exists!"
+        )

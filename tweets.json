@@ -27,9 +27,9 @@
   },
   {
     "tweet_id": "3fa85f64-5717-4562-b3fc-2c963f66afa0",
-    "content": "string_0",
+    "content": "Editado para probar la API",
     "created_at": "2022-02-15 20:27:39.019953",
-    "update_at": "2022-02-16 02:29:02.645000+00:00",
+    "update_at": "2022-02-16 02:58:06.266000+00:00",
     "by": {
       "user_id": "3fa85f64-5717-4562-b3fc-2c963f66afa0",
       "email": "miguel@example.com",
